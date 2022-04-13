@@ -1,0 +1,15 @@
+{
+  "extends": "eslint-config-wesbos/tsconfig.json",
+  "include": [
+    "**/*"
+  ],
+  "compilerOptions": {
+    "outDir": "dist",
+    "paths": {
+      "*": [
+        "*.d.ts"
+      ]
+    },
+    "baseUrl": "."
+  }
+}

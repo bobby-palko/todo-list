@@ -22,6 +22,6 @@ app.get('/', (req, res) => {
 });
 
 // root route for api endpoints
-app.use('/api/todo', itemRouter);
+app.use('/api', itemRouter);
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
