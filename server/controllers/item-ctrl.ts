@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { AnyRecord } from 'dns';
 import express from 'express';
-import { Item, IItem } from '../models/todo-model';
+import { Item } from '../models/todo-model';
 
-async function createItem(
+const createItem = async (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> {
+): Promise<express.Response | undefined> => {
   const { body } = req;
 
   if (!body) {
@@ -42,12 +41,12 @@ async function createItem(
         message: 'new item unable to be added',
       })
     );
-}
+};
 
-async function updateItem(
+const updateItem = async (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> {
+): Promise<express.Response | undefined> => {
   const { body } = req;
 
   if (!body) {
@@ -84,12 +83,12 @@ async function updateItem(
         })
       );
   });
-}
+};
 
-async function deleteItem(
+const deleteItem = async (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> {
+): Promise<express.Response | undefined> => {
   const { body } = req;
 
   if (!body) {
@@ -98,7 +97,9 @@ async function deleteItem(
       error: 'You must provide something to delete!',
     });
   }
-  await Item.findOneAndDelete({ _id: req.params.id }, (err: any, item: any) => {
+
+  // we're not actually deleting from the DB, just deactivating it
+  await Item.findOne({ _id: req.params.id }, async (err: any, item: any) => {
     if (err) {
       return res.status(400).json({
         success: false,
@@ -114,27 +115,33 @@ async function deleteItem(
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      data: item,
-    });
-  }).catch((error) => {
-    console.log('AHHH');
-    console.log(error);
-    return res.status(500).json({
-      error,
-      message: 'An error occurred trying to delete the object.',
-    });
+    item.active = false;
+
+    await item
+      .save()
+      .then(() =>
+        res.status(200).json({
+          success: true,
+          id: item._id,
+          message: 'Item deleted!',
+        })
+      )
+      .catch((error: any) =>
+        res.status(404).json({
+          error,
+          message: 'item unable to be deactivated',
+        })
+      );
   });
-}
+};
 
 /**
  * We won't be getting a single item at any point, but still good practice
  */
-async function getItemById(
+const getItemById = async (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> {
+): Promise<express.Response | undefined> => {
   const { body } = req;
 
   if (!body) {
@@ -163,12 +170,12 @@ async function getItemById(
       data: item,
     });
   }).catch((err) => console.log(err));
-}
+};
 
-async function getAllItems(
+const getAllItems = async (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> {
+): Promise<express.Response | undefined> => {
   const { body } = req;
 
   if (!body) {
@@ -197,12 +204,6 @@ async function getAllItems(
       data: items,
     });
   }).catch((err) => console.log(err));
-}
-
-module.exports = {
-  createItem,
-  updateItem,
-  deleteItem,
-  getAllItems,
-  getItemById,
 };
+
+export { createItem, updateItem, deleteItem, getAllItems, getItemById };
