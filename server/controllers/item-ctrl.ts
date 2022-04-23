@@ -18,6 +18,7 @@ const createItem = async (
   }
 
   const item = new Item(body);
+  item.active = true;
 
   if (!item) {
     return res.status(400).json({
@@ -63,6 +64,7 @@ const updateItem = async (
         message: 'Item not found.',
       });
     }
+    console.log(body);
 
     item.title = body.title;
     item.description = body.description;
@@ -184,7 +186,7 @@ const getAllItems = async (
       error: 'No search parameters!',
     });
   }
-  await Item.find({}, (err, items) => {
+  await Item.find({ active: true }, (err, items) => {
     if (err) {
       return res.status(400).json({
         success: false,

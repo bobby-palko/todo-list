@@ -9,7 +9,7 @@ interface IItem {
 const itemsSchema = new Schema<IItem>({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  active: { type: Boolean, required: true },
+  active: { type: Boolean, required: false },
 });
 
 const Item = model<IItem>('Item', itemsSchema);

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import React, { FunctionComponent, useCallback, useState } from 'react';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { NewItemProps } from '../types';
 import {
   StyledCard,
   StyledCardHeader,
@@ -10,35 +12,42 @@ import {
   StyledFabButton,
 } from './styles';
 
-const NewItem = (props: any) => {
+const NewItem: FunctionComponent<NewItemProps> = ({
+  id,
+  title,
+  description,
+  addItem,
+  updateItem,
+}) => {
   const [item, setItem] = useState({
-    name: props.name,
-    notes: props.notes,
+    title,
+    description,
   });
 
-  function handleChange(event: any) {
-    const { name, value } = event.target;
+  const handleChange = useCallback(({ target: { name, value } }) => {
     setItem((prevItem) => ({
       ...prevItem,
-      [name]: value,
+      [name as string]: value as string,
     }));
-  }
+  }, []);
 
-  function submitItem(event: any) {
-    event.preventDefault(); // stops the page from reloading
+  const submitItem = useCallback(() => {
     // only add the item if text is in both fields
-    if (item.name && item.notes) {
-      if (props.id) {
-        props.addItem(props.id, item);
+    if (item.title && item.description) {
+      if (id) {
+        updateItem(id, item);
+      } else if (addItem) {
+        addItem(item);
       } else {
-        props.addItem(item);
+        console.log(`ERROR: Unable to submit item with title '${item.title}'.`);
+        return;
       }
       setItem({
-        name: '',
-        notes: '',
+        title: '',
+        description: '',
       });
     }
-  }
+  }, [addItem, updateItem, id, item]);
 
   return (
     <StyledCard>
@@ -49,16 +58,16 @@ const NewItem = (props: any) => {
         <div>
           <form>
             <StyledInput
-              name="name"
+              name="title"
               placeholder="What's your idea?"
-              value={item.name}
+              value={item.title}
               onChange={handleChange}
             />
             <HRule />
             <StyledTextArea
-              name="notes"
+              name="description"
               placeholder="Tell me about it!"
-              value={item.notes}
+              value={item.description}
               onChange={handleChange}
             />
             <StyledFabButton onClick={submitItem}>

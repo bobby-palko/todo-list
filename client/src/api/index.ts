@@ -5,12 +5,12 @@ const api = axios.create({
   baseURL: 'http://localhost:3000/api/',
 });
 
-export const addItem = (payload: IItem) => api.post('/item', payload);
-export const getAllItems = () => api.get('/items');
-export const updateItemByID = (id: string, payload: string) =>
+const addItem = (payload: IItem) => api.post('/item', payload);
+const getAllItems = () => api.get('/items');
+const updateItemByID = (id: string, payload: IItem) =>
   api.put(`/item/${id}`, payload);
-export const deleteItemByID = (id: string) => api.delete(`/item/${id}`);
-export const getItemById = (id: string) => api.get(`/item/${id}`);
+const deleteItemByID = (id: string) => api.delete(`/item/${id}`);
+const getItemById = (id: string) => api.get(`/item/${id}`);
 
 const apis = {
   addItem,

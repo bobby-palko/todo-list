@@ -1,12 +1,18 @@
 import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
+import {
+  StyledCardHeaderProps,
+  StyledCardProps,
+  StyledButtonProps,
+  StyledHeaderProps,
+} from '../types';
 
 const StyledCardBody = styled.div`
   padding: 0.5rem;
 `;
 
-const StyledCardHeader = styled.div`
+const StyledCardHeader = styled.div<StyledCardHeaderProps>`
   background-color: rgba(0, 170, 170, 0.9);
   text-align: center;
   border-radius: 10px 10px 0 0;
@@ -21,7 +27,7 @@ const StyledFooter = styled.footer`
   color: rgba(0, 0, 0, 0.5);
 `;
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.header<StyledHeaderProps>`
   margin-top: 0;
   background-color: rgba(0, 170, 170, 0.7);
   height: 100px;
@@ -31,7 +37,7 @@ const StyledHeader = styled.header`
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
 `;
 
-const StyledCard = styled.div`
+const StyledCard = styled.div<StyledCardProps>`
   background-color: #eee;
   margin: 1rem;
   border-radius: 10px;
@@ -54,7 +60,7 @@ const StyledCard = styled.div`
     `}
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<StyledButtonProps>`
   && {
     width: 25%;
     border-radius: 10px 0 10px 0;

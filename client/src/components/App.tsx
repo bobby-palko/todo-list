@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable react/jsx-no-bind */
 import React, { useEffect, useState } from 'react';
 import Footer from './Footer';
 import Header from './Header';
 import Item from './Item';
 import NewItem from './NewItem';
-import api from '../api';
+import apis from '../api';
 import { IItem, JItem } from '../types';
 
 function App() {
@@ -13,7 +15,7 @@ function App() {
   const [listItems, setListItems] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getAllItems();
+      const res = await apis.getAllItems();
       setListItems(res.data.data);
       setLoad(true);
     };
@@ -21,17 +23,17 @@ function App() {
   }, [isLoaded]);
 
   function addItem(newItem: IItem) {
-    api.addItem(newItem);
+    apis.addItem(newItem);
     setLoad(false);
   }
 
   function deleteItem(id: string) {
-    api.deleteItemByID(id);
+    apis.deleteItemByID(id);
     setLoad(false);
   }
 
-  function updateItem(id: string, description: string) {
-    api.updateItemByID(id, description);
+  function updateItem(id: string, item: IItem) {
+    apis.updateItemByID(id, item);
     setLoad(false);
   }
 
@@ -47,16 +49,22 @@ function App() {
           justifyContent: 'space-evenly',
         }}
       >
-        <NewItem addItem={addItem} name="" notes="" />
+        <NewItem
+          addItem={addItem}
+          updateItem={updateItem}
+          title=""
+          description=""
+        />
         {isLoaded &&
-          listItems.map((item: JItem, index) => (
+          listItems.map((item: JItem) => (
             <Item
               key={item._id}
               id={item._id}
-              name={item.title}
-              notes={item.description}
-              delete={deleteItem}
-              update={updateItem}
+              title={item.title}
+              description={item.description}
+              remove={deleteItem}
+              updateItem={updateItem}
+              addItem={addItem}
             />
           ))}
       </div>
