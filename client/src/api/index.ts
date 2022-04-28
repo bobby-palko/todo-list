@@ -2,15 +2,15 @@ import axios from 'axios';
 import { IItem } from '../types';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: 'https://todo.bobbypalko.com/api/',
 });
 
-const addItem = async (payload: IItem) => api.post('/item', payload);
-const getAllItems = async () => api.get('/items');
-const updateItemByID = async (id: string, payload: IItem) =>
+const addItem = (payload: IItem) => api.post('/item', payload);
+const getAllItems = () => api.get('/items');
+const updateItemByID = (id: string, payload: IItem) =>
   api.put(`/item/${id}`, payload);
-const deleteItemByID = async (id: string) => api.delete(`/item/${id}`);
-const getItemById = async (id: string) => api.get(`/item/${id}`);
+const deleteItemByID = (id: string) => api.delete(`/item/${id}`);
+const getItemById = (id: string) => api.get(`/item/${id}`);
 
 const apis = {
   addItem,

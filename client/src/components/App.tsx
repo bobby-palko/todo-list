@@ -22,18 +22,18 @@ function App() {
     fetchData();
   }, [isLoaded]);
 
-  function addItem(newItem: IItem) {
-    apis.addItem(newItem);
+  async function addItem(newItem: IItem) {
+    await apis.addItem(newItem);
     setLoad(false);
   }
 
-  function deleteItem(id: string) {
-    apis.deleteItemByID(id);
+  async function deleteItem(id: string) {
+    await apis.deleteItemByID(id);
     setLoad(false);
   }
 
-  function updateItem(id: string, item: IItem) {
-    apis.updateItemByID(id, item);
+  async function updateItem(id: string, item: IItem) {
+    await apis.updateItemByID(id, item);
     setLoad(false);
   }
 

@@ -80,193 +80,156 @@ var createItem = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.createItem = createItem;
-var updateItem = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                body = req.body;
-                if (!body) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            error: 'You must provide something to update',
+var updateItem = function (req, res) {
+    var body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide something to update',
+        });
+    }
+    todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (err) {
+                        return [2 /*return*/, res.status(404).json({
+                                err: err,
+                                message: 'Item not found.',
+                            })];
+                    }
+                    console.log(body);
+                    item.title = body.title;
+                    item.description = body.description;
+                    return [4 /*yield*/, item
+                            .save()
+                            .then(function () {
+                            return res.status(200).json({
+                                success: true,
+                                id: item._id,
+                                message: 'Item updated!',
+                            });
+                        })
+                            .catch(function (error) {
+                            return res.status(404).json({
+                                error: error,
+                                message: 'item unable to be updated',
+                            });
                         })];
-                }
-                return [4 /*yield*/, todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) { return __awaiter(void 0, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (err) {
-                                        return [2 /*return*/, res.status(404).json({
-                                                err: err,
-                                                message: 'Item not found.',
-                                            })];
-                                    }
-                                    console.log(body);
-                                    item.title = body.title;
-                                    item.description = body.description;
-                                    return [4 /*yield*/, item
-                                            .save()
-                                            .then(function () {
-                                            return res.status(200).json({
-                                                success: true,
-                                                id: item._id,
-                                                message: 'Item updated!',
-                                            });
-                                        })
-                                            .catch(function (error) {
-                                            return res.status(404).json({
-                                                error: error,
-                                                message: 'item unable to be updated',
-                                            });
-                                        })];
-                                case 1:
-                                    _a.sent();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); };
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+};
 exports.updateItem = updateItem;
-var deleteItem = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                body = req.body;
-                if (!body) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            error: 'You must provide something to delete!',
-                        })];
-                }
-                // we're not actually deleting from the DB, just deactivating it
-                return [4 /*yield*/, todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) { return __awaiter(void 0, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (err) {
-                                        return [2 /*return*/, res.status(400).json({
-                                                success: false,
-                                                error: err,
-                                            })];
-                                    }
-                                    if (!item) {
-                                        console.log('Whoops');
-                                        return [2 /*return*/, res.status(404).json({
-                                                success: false,
-                                                error: 'Item not found',
-                                            })];
-                                    }
-                                    item.active = false;
-                                    return [4 /*yield*/, item
-                                            .save()
-                                            .then(function () {
-                                            return res.status(200).json({
-                                                success: true,
-                                                id: item._id,
-                                                message: 'Item deleted!',
-                                            });
-                                        })
-                                            .catch(function (error) {
-                                            return res.status(404).json({
-                                                error: error,
-                                                message: 'item unable to be deactivated',
-                                            });
-                                        })];
-                                case 1:
-                                    _a.sent();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); })];
-            case 1:
-                // we're not actually deleting from the DB, just deactivating it
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.deleteItem = deleteItem;
-/**
- * We won't be getting a single item at any point, but still good practice
- */
-var getItemById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                body = req.body;
-                if (!body) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            error: 'No search parameters!',
-                        })];
-                }
-                return [4 /*yield*/, todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) {
-                        if (err) {
-                            return res.status(400).json({
+var deleteItem = function (req, res) {
+    var body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide something to delete!',
+        });
+    }
+    // we're not actually deleting from the DB, just deactivating it
+    todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (err) {
+                        return [2 /*return*/, res.status(400).json({
                                 success: false,
                                 error: err,
-                            });
-                        }
-                        if (!item) {
-                            return res.status(404).json({
+                            })];
+                    }
+                    if (!item) {
+                        console.log('Whoops');
+                        return [2 /*return*/, res.status(404).json({
                                 success: false,
                                 error: 'Item not found',
+                            })];
+                    }
+                    item.active = false;
+                    return [4 /*yield*/, item
+                            .save()
+                            .then(function () {
+                            return res.status(200).json({
+                                success: true,
+                                id: item._id,
+                                message: 'Item deleted!',
                             });
-                        }
-                        return res.status(200).json({
-                            success: true,
-                            data: item,
-                        });
-                    }).catch(function (err) { return console.log(err); })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.getItemById = getItemById;
-var getAllItems = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                body = req.body;
-                if (!body) {
-                    return [2 /*return*/, res.status(400).json({
-                            success: false,
-                            error: 'No search parameters!',
-                        })];
-                }
-                return [4 /*yield*/, todo_model_1.Item.find({ active: true }, function (err, items) {
-                        if (err) {
-                            return res.status(400).json({
-                                success: false,
-                                error: err,
-                            });
-                        }
-                        if (!items.length) {
+                        })
+                            .catch(function (error) {
                             return res.status(404).json({
-                                success: false,
-                                error: 'Items not found!',
+                                error: error,
+                                message: 'item unable to be deactivated',
                             });
-                        }
-                        return res.status(200).json({
-                            success: true,
-                            data: items,
-                        });
-                    }).catch(function (err) { return console.log(err); })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
+                        })];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+};
+exports.deleteItem = deleteItem;
+/**
+ * We probably won't be getting a single item at any point, but still good practice
+ */
+var getItemById = function (req, res) {
+    var body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'No search parameters!',
+        });
+    }
+    todo_model_1.Item.findOne({ _id: req.params.id }, function (err, item) {
+        if (err) {
+            return res.status(400).json({
+                success: false,
+                error: err,
+            });
         }
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                error: 'Item not found',
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            data: item,
+        });
     });
-}); };
+};
+exports.getItemById = getItemById;
+var getAllItems = function (req, res) {
+    var body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'No search parameters!',
+        });
+    }
+    todo_model_1.Item.find({ active: true }, function (err, items) {
+        if (err) {
+            return res.status(400).json({
+                success: false,
+                error: err,
+            });
+        }
+        if (!items.length) {
+            return res.status(404).json({
+                success: false,
+                error: 'Items not found!',
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            data: items,
+        });
+    });
+};
 exports.getAllItems = getAllItems;
