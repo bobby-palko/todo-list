@@ -139,7 +139,7 @@ const deleteItem = async (
 };
 
 /**
- * We won't be getting a single item at any point, but still good practice
+ * We probably won't be getting a single item at any point, but still good practice
  */
 const getItemById = async (
   req: express.Request,
@@ -172,7 +172,7 @@ const getItemById = async (
       success: true,
       data: item,
     });
-  }).catch((err) => console.log(err));
+  });
 };
 
 const getAllItems = async (
@@ -206,7 +206,7 @@ const getAllItems = async (
       success: true,
       data: items,
     });
-  }).catch((err) => console.log(err));
+  });
 };
 
 export { createItem, updateItem, deleteItem, getAllItems, getItemById };
