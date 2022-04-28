@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
-import { Item } from '../models/todo-model';
+import { CallbackError } from 'mongoose';
+import { IItem, Item } from '../models/todo-model';
 
 const createItem = async (
   req: express.Request,
@@ -186,7 +187,7 @@ const getAllItems = async (
       error: 'No search parameters!',
     });
   }
-  await Item.find({ active: true }, (err, items) => {
+  await Item.find({ active: true }, (err: CallbackError, items: IItem[]) => {
     if (err) {
       return res.status(400).json({
         success: false,
