@@ -45,10 +45,10 @@ const createItem = async (
     );
 };
 
-const updateItem = async (
+const updateItem = (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> => {
+): express.Response | undefined => {
   const { body } = req;
 
   if (!body) {
@@ -58,7 +58,7 @@ const updateItem = async (
     });
   }
 
-  await Item.findOne({ _id: req.params.id }, async (err: any, item: any) => {
+  Item.findOne({ _id: req.params.id }, async (err: any, item: any) => {
     if (err) {
       return res.status(404).json({
         err,
@@ -88,10 +88,10 @@ const updateItem = async (
   });
 };
 
-const deleteItem = async (
+const deleteItem = (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> => {
+): express.Response | undefined => {
   const { body } = req;
 
   if (!body) {
@@ -102,7 +102,7 @@ const deleteItem = async (
   }
 
   // we're not actually deleting from the DB, just deactivating it
-  await Item.findOne({ _id: req.params.id }, async (err: any, item: any) => {
+  Item.findOne({ _id: req.params.id }, async (err: any, item: any) => {
     if (err) {
       return res.status(400).json({
         success: false,
@@ -141,10 +141,10 @@ const deleteItem = async (
 /**
  * We probably won't be getting a single item at any point, but still good practice
  */
-const getItemById = async (
+const getItemById = (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> => {
+): express.Response | undefined => {
   const { body } = req;
 
   if (!body) {
@@ -153,7 +153,7 @@ const getItemById = async (
       error: 'No search parameters!',
     });
   }
-  await Item.findOne({ _id: req.params.id }, (err: any, item: any) => {
+  Item.findOne({ _id: req.params.id }, (err: any, item: any) => {
     if (err) {
       return res.status(400).json({
         success: false,
@@ -175,10 +175,10 @@ const getItemById = async (
   });
 };
 
-const getAllItems = async (
+const getAllItems = (
   req: express.Request,
   res: express.Response
-): Promise<express.Response | undefined> => {
+): express.Response | undefined => {
   const { body } = req;
 
   if (!body) {
@@ -187,7 +187,7 @@ const getAllItems = async (
       error: 'No search parameters!',
     });
   }
-  await Item.find({ active: true }, (err: CallbackError, items: IItem[]) => {
+  Item.find({ active: true }, (err: CallbackError, items: IItem[]) => {
     if (err) {
       return res.status(400).json({
         success: false,
